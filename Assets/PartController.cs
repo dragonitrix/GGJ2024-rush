@@ -114,4 +114,19 @@ public class PartController : MonoBehaviour
 
         squishTween = spriteRenderer.gameObject.Tween(null, Vector3.one * 0.8f, Vector3.one, 1f, TweenScaleFunctions.EaseOutElastic, onUpdate, onComplete);
     }
+
+    public PartDetail GetPartDetail()
+    {
+        PartDetail detail;
+        detail.type = type;
+        detail.partIndex = partIndex;
+        return detail;
+    }
+
+}
+
+public struct PartDetail
+{
+    public FACIAL_PART type;
+    public int partIndex;
 }

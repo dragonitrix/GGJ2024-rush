@@ -36,6 +36,8 @@ public class PlayerFacialManager : MonoBehaviour
 
     public List<LimbController> subLimbs = new List<LimbController>();
 
+    [Header("Settings")]
+    public float ejectForce = 100f;
 
     public int max_subPart = 10;
 
@@ -50,11 +52,9 @@ public class PlayerFacialManager : MonoBehaviour
         AddLimb(LIMB_PART.ARM, 0);
     }
 
-    public void RemovePart()
+    public void RemovePart( bool anim = true)
     {
-
         var result = Random.Range(0, 2);
-
         if (result == 0)
         {
             RemoveFacial();
@@ -64,6 +64,10 @@ public class PlayerFacialManager : MonoBehaviour
             RemoveLimb();
         }
 
+        if(anim){
+            BodyFlash();
+            Squish();
+        }
 
     }
 
@@ -75,6 +79,9 @@ public class PlayerFacialManager : MonoBehaviour
             // remove sub first
             var sub = subParts[subParts.Count - 1];
             subParts.Remove(sub);
+
+            EjectPart(sub.GetPartDetail());
+
             sub.Kill();
         }
         else
@@ -84,16 +91,19 @@ public class PlayerFacialManager : MonoBehaviour
             if (!part_Mouth.isEmpty)
             {
                 part_Mouth.RemovePart();
+                EjectPart(part_Mouth.GetPartDetail());
                 return;
             }
             if (!part_RightEye.isEmpty)
             {
                 part_RightEye.RemovePart();
+                EjectPart(part_RightEye.GetPartDetail());
                 return;
             }
             if (!part_LeftEye.isEmpty)
             {
                 part_LeftEye.RemovePart();
+                EjectPart(part_LeftEye.GetPartDetail());
                 return;
             }
         }
@@ -102,54 +112,95 @@ public class PlayerFacialManager : MonoBehaviour
 
     public void RemoveLimb()
     {
-
         bool noSubLimb = true;
-
         foreach (var subLimb in subLimbs)
         {
             if (!subLimb.isEmpty)
             {
                 subLimb.RemovePart();
+                EjectPart(subLimb.GetLimbDetail());
                 noSubLimb = false;
                 break;
             }
         }
-
-
         if (!noSubLimb) return;
-
 
         if (!limb_LeftArm.isEmpty)
         {
             limb_LeftArm.RemovePart();
+            EjectPart(limb_LeftArm.GetLimbDetail());
             return;
         }
         if (!limb_RightArm.isEmpty)
         {
             limb_RightArm.RemovePart();
+            EjectPart(limb_RightArm.GetLimbDetail());
             return;
         }
         if (!limb_LeftLeg.isEmpty)
         {
             limb_LeftLeg.RemovePart();
+            EjectPart(limb_LeftLeg.GetLimbDetail());
             return;
         }
         if (!limb_RightLeg.isEmpty)
         {
             limb_RightLeg.RemovePart();
+            EjectPart(limb_RightLeg.GetLimbDetail());
             return;
         }
         if (!limb_LeftEar.isEmpty)
         {
             limb_LeftEar.RemovePart();
+            EjectPart(limb_LeftEar.GetLimbDetail());
             return;
         }
         if (!limb_RightEar.isEmpty)
         {
             limb_RightEar.RemovePart();
+            EjectPart(limb_RightEar.GetLimbDetail());
             return;
         }
 
+    }
+
+    public void EjectPart(PartDetail detail)
+    {
+        EjectPart(detail.type, detail.partIndex);
+    }
+    public void EjectPart(FACIAL_PART facial, int index)
+    {
+        var clone = Instantiate(PartData.instance.ejected_part_prefab);
+        var controller = clone.GetComponent<PartController>();
+        controller.SetType(facial);
+        controller.SetPart(index);
+        clone.transform.position = transform.position;
+        var rb = clone.GetComponent<Rigidbody2D>();
+        Fling(rb);
+    }
+
+    public void EjectPart(LimbDetail detail)
+    {
+        EjectPart(detail.type, detail.partIndex);
+    }
+    public void EjectPart(LIMB_PART limb, int index)
+    {
+        var clone = Instantiate(PartData.instance.ejected_limb_prefab);
+        var controller = clone.GetComponent<LimbController>();
+        controller.SetType(limb);
+        controller.SetPart(index);
+        clone.transform.position = transform.position;
+        var rb = clone.GetComponent<Rigidbody2D>();
+        Fling(rb);
+    }
+
+    public void Fling(Rigidbody2D rb_part)
+    {
+        var dir = Random.insideUnitCircle.normalized;
+        var force = ejectForce;
+        rb_part.AddForce(dir * force, ForceMode2D.Impulse);
+
+        Destroy(rb_part.gameObject,5f);
     }
 
     public void AddPart(FACIAL_PART type, int index)
@@ -367,7 +418,6 @@ public class PlayerFacialManager : MonoBehaviour
     }
 
     Vector3Tween coreTween;
-
     public void Squish()
     {
         if (coreTween != null)
@@ -395,6 +445,52 @@ public class PlayerFacialManager : MonoBehaviour
             onUpdate,
             onComplete
         );
+    }
+
+    FloatTween bodyFlashTween;
+
+    [ContextMenu("BodyFlash")]
+    public void BodyFlash()
+    {
+
+        var duration = 1f;
+
+        if (bodyFlashTween != null)
+        {
+            bodyFlashTween.Stop(TweenStopBehavior.Complete);
+        }
+
+        sr_body.material.shader = PartData.instance.shaderSpritesDefault;
+
+        System.Action<ITween<float>> onUpdate = (t) =>
+        {
+            var tick = Mathf.Round(t.CurrentValue);
+
+            if (tick % 10 >= 5)
+            {
+                sr_body.material.shader = PartData.instance.shaderGUItext;
+            }
+            else
+            {
+                sr_body.material.shader = PartData.instance.shaderSpritesDefault;
+            }
+        };
+
+        System.Action<ITween<float>> onComplete = (t) =>
+        {
+            sr_body.material.shader = PartData.instance.shaderSpritesDefault;
+        };
+
+        bodyFlashTween = sr_body.gameObject.Tween(
+            null,
+            0f,
+            duration * 60f,
+            duration,
+            TweenScaleFunctions.Linear,
+            onUpdate,
+            onComplete
+        );
+
     }
 
     // Start is called before the first frame update
@@ -485,22 +581,21 @@ public class PlayerFacialManager : MonoBehaviour
             body_elapsed -= 10000f;
         }
 
-        var xPos = transform.position.x * 1.5f;
+        var xPos = transform.position.x;
+        var zPos = transform.position.z;
+
+        var horizontal_movement = new Vector2(xPos, zPos).magnitude * 1.5f;
 
         var distance = 0.5f;
 
-        var l_Yoffset = Mathf.Sin(xPos) * distance;
-        var r_Yoffset = Mathf.Sin(xPos + Mathf.PI) * distance;
+        var l_Yoffset = Mathf.Sin(horizontal_movement) * distance;
+        var r_Yoffset = Mathf.Sin(horizontal_movement + Mathf.PI) * distance;
 
         limb_LeftLeg.spriteRenderer.transform.localPosition = new Vector3(0, l_Yoffset, 0);
         limb_RightLeg.spriteRenderer.transform.localPosition = new Vector3(0, r_Yoffset, 0);
 
-
         var body_Yoffset = Mathf.Sin(body_elapsed) * 0.05f;
         bodyGroup.transform.localPosition = new Vector3(0, body_Yoffset, 0);
-
-
-
 
     }
 

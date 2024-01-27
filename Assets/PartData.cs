@@ -9,6 +9,10 @@ public class PartData : MonoBehaviour
 
     [Header("Prefabs")]
     public GameObject part_prefab;
+    public GameObject limb_prefab;
+
+    public GameObject ejected_part_prefab;
+    public GameObject ejected_limb_prefab;
 
     [Header("Sprite")]
     public List<Sprite> eye_sprites = new List<Sprite>();
@@ -26,6 +30,11 @@ public class PartData : MonoBehaviour
     public float newPartRandomDistance = 1f;
     public float partPosRandomDistance = 0.1f;
 
+    [Header("Shader")]
+
+	public Shader shaderGUItext;
+	public Shader shaderSpritesDefault;
+
     private void Awake()
     {
         if (instance == null)
@@ -36,6 +45,10 @@ public class PartData : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
+
+        shaderGUItext = Shader.Find("GUI/Text Shader");
+		shaderSpritesDefault = Shader.Find("Sprites/Default"); // or whatever sprite shader is being used
+
     }
 
     public List<Sprite> GetPartSprites(FACIAL_PART type)

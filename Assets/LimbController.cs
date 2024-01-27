@@ -107,4 +107,16 @@ public class LimbController : MonoBehaviour
 
          squishTween = spriteRenderer.gameObject.Tween(null, Vector3.one * 0.8f * 5f, Vector3.one * 5f, 1f, TweenScaleFunctions.EaseOutElastic, onUpdate, onComplete);
     }
+
+    public LimbDetail GetLimbDetail(){
+        LimbDetail detail;
+        detail.type = type;
+        detail.partIndex = partIndex;
+        return detail;
+    }
+}
+
+public struct LimbDetail{
+    public LIMB_PART type;
+    public int partIndex;
 }
