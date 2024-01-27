@@ -78,6 +78,23 @@ public class PartData : MonoBehaviour
         }
     }
 
+    public List<Sprite> GetLimb(COLOR color, LIMB_PART type)
+    {
+        var body = GetBodyFromColor(color);
+
+        switch (type)
+        {
+            case LIMB_PART.ARM:
+                return body.arms;
+            case LIMB_PART.LEG:
+                return body.legs;
+            case LIMB_PART.DETAIL:
+                return body.details;
+            default:
+                return null;
+        }
+    }
+
     //public List<Sprite> GetLimbSprites()
     //{
     //

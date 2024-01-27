@@ -7,9 +7,6 @@ using System.Linq;
 public class PlayerFacialManager : MonoBehaviour
 {
 
-    //public GameObject pivot;
-    //public Transform limbGroup;
-
     [Header("Type")]
     public COLOR mainColor = COLOR.RED;
 
@@ -19,10 +16,21 @@ public class PlayerFacialManager : MonoBehaviour
     public PartController part_Mouth;
 
     [Header("Reference")]
-    public SpriteRenderer sr_body ;
+    public SpriteRenderer sr_body;
     public Transform subPartGroup;
 
     public List<PartController> subParts = new List<PartController>();
+
+    public List<LimbController> limbs = new List<LimbController>();
+
+    [Header("Main Limb")]
+    public LimbController limb_LeftArm;
+    public LimbController limb_RightArm;
+    public LimbController limb_LeftLeg;
+    public LimbController limb_RightLeg;
+    public LimbController limb_LeftEar;
+    public LimbController limb_RightEar;
+    public Transform limbGroup;
 
     public int max_subPart = 10;
 
@@ -52,7 +60,7 @@ public class PlayerFacialManager : MonoBehaviour
         for (int i = 0; i < 1000; i++)
         {
             pos = transform.position + (Vector3)(Random.insideUnitCircle * PartData.instance.newPartRandomDistance);
-            var result = CheckInsideOtherPart(pos,0.3f) ;
+            var result = CheckInsideOtherPart(pos, 0.3f);
             if (!result)
             {
                 //Debug.Log("found");
@@ -68,32 +76,35 @@ public class PlayerFacialManager : MonoBehaviour
         return pos;
     }
 
-    public bool CheckInsideOtherPart(Vector2 pos, float radius){
+    public bool CheckInsideOtherPart(Vector2 pos, float radius)
+    {
         var colliders = Physics2D.OverlapCircleAll(pos, radius).ToList<Collider2D>();
         //Debug.Log("colliders count:" + colliders.Count);
         var colliders_filtered = new List<Collider2D>();
-        foreach(var collider in colliders)
+        foreach (var collider in colliders)
         {
             //Debug.Log(collider.name);
-            if(collider.CompareTag("Part")) colliders_filtered.Add(collider);
+            if (collider.CompareTag("Part")) colliders_filtered.Add(collider);
         }
 
         //Debug.Log("filtered count: "+colliders_filtered.Count);
 
-        if(colliders_filtered.Count > 0 ) return true;
+        if (colliders_filtered.Count > 0) return true;
         else return false;
     }
 
-    public void SetBodyType(int index){
+    public void SetBodyType(int index)
+    {
         sr_body.sprite = PartData.instance.GetBobySprites(mainColor)[index];
 
         Squish();
 
     }
 
-    public void RandomBodyType(){
+    public void RandomBodyType()
+    {
         var pool = PartData.instance.GetBobySprites(mainColor);
-        SetBodyType(Random.Range(0,pool.Count));
+        SetBodyType(Random.Range(0, pool.Count));
     }
 
     public void RandomPart(int facial)
@@ -141,7 +152,7 @@ public class PlayerFacialManager : MonoBehaviour
     public void Squish()
     {
 
-        if(coreTween != null)
+        if (coreTween != null)
         {
             coreTween.Stop(TweenStopBehavior.Complete);
         }
@@ -164,30 +175,74 @@ public class PlayerFacialManager : MonoBehaviour
     void Start()
     {
 
-       //var distance = 1f;
-       //
-       //var division = 12f;
-       //
-       //var delta = Mathf.PI * 2 / division;
-       //
-       //for (int i = 0; i < division; i++)
-       //{
-       //    var pos = new Vector2(
-       //        distance * Mathf.Cos(delta * i),
-       //        distance * Mathf.Sin(delta * i)
-       //        );
-       //    var clone = Instantiate(pivot, limbGroup);
-       //    clone.transform.localPosition = (Vector3)pos;
-       //    clone.transform.Rotate(0f, 0f, delta * i * Mathf.Rad2Deg + 90);
-       //}
-
 
     }
+    [ContextMenu("SetLimbPos")]
+    public void SetLimbPos()
+    {
+        var distance = 0.7f;
+        var division = limbs.Count;
+        var delta = Mathf.PI * 2 / division;
+
+        for (int i = 0; i < division; i++)
+        {
+
+            var clone = limbs[i].gameObject;
+
+            var pos = new Vector2(
+                distance * Mathf.Cos(delta * i),
+                distance * Mathf.Sin(delta * i)
+                );
+
+            clone.transform.localPosition = (Vector3)pos;
+            clone.transform.Rotate(0f, 0f, delta * i * Mathf.Rad2Deg + 90);
+        }
+
+
+        limb_LeftArm.transform.rotation = Quaternion.Euler(Vector3.zero);
+        limb_RightArm.transform.rotation = Quaternion.Euler(Vector3.zero);
+        limb_LeftLeg.transform.rotation = Quaternion.Euler(Vector3.zero);
+        limb_RightLeg.transform.rotation = Quaternion.Euler(Vector3.zero);
+        limb_LeftEar.transform.rotation = Quaternion.Euler(Vector3.zero);
+        limb_RightEar.transform.rotation = Quaternion.Euler(Vector3.zero);
+
+        limb_LeftArm.spriteRenderer.flipX = true;
+        limb_LeftLeg.spriteRenderer.flipX = true;
+        limb_LeftEar.spriteRenderer.flipX = true;
+
+    }
+
+    //public GameObject pivot;
+    //
+    //[ContextMenu("SpawnLimb")]
+    //public void SpawnLimb()
+    //{
+    //    var distance = 0.7f;
+    //    var division = 12f;
+    //    var delta = Mathf.PI * 2 / division;
+    //
+    //    for (int i = 0; i < division; i++)
+    //    {
+    //        var pos = new Vector2(
+    //            distance * Mathf.Cos(delta * i),
+    //            distance * Mathf.Sin(delta * i)
+    //            );
+    //        var clone = Instantiate(pivot, limbGroup);
+    //        clone.transform.localPosition = (Vector3)pos;
+    //
+    //        clone.transform.Rotate(0f, 0f, delta * i * Mathf.Rad2Deg + 90);
+    //
+    //        var limb = clone.GetComponent<LimbController>();
+    //
+    //        limbs.Add(limb);
+    //
+    //    }
+    //}
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 }
 
