@@ -11,7 +11,7 @@ public class PartController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        SetPart(0);
+        //SetPart(0);
     }
 
     // Update is called once per frame
@@ -36,7 +36,8 @@ public class PartController : MonoBehaviour
     public void RandomPart(bool skipAnim = false)
     {
         var pool = PartData.instance.GetPartSprites(type);
-        SetPart(Random.Range(0, pool.Count), skipAnim);
+        var randResult = Random.Range(0, pool.Count);
+        SetPart(randResult, skipAnim);
 
     }
     public void SetPart(int index, bool skipAnim = false)
