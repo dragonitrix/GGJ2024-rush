@@ -51,6 +51,37 @@ public class PartData : MonoBehaviour
                 return null;
         }
     }
+
+    public List<Sprite> GetBobySprites(COLOR color)
+    {
+        return GetBodyFromColor(color).bodies;
+    }
+
+    public BodyPart GetBodyFromColor(COLOR color)
+    {
+        switch (color)
+        {
+            case COLOR.BLUE:
+                return blue;
+            case COLOR.BROWN:
+                return brown;
+            case COLOR.GREEN:
+                return green;
+            case COLOR.RED:
+                return red;
+            case COLOR.WHITE:
+                return white;
+            case COLOR.YELLOW:
+                return yellow;
+            default:
+                return white;
+        }
+    }
+
+    //public List<Sprite> GetLimbSprites()
+    //{
+    //
+    //}
 }
 
 [Serializable]

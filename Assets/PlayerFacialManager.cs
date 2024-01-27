@@ -6,13 +6,20 @@ using System.Linq;
 
 public class PlayerFacialManager : MonoBehaviour
 {
+
+    //public GameObject pivot;
+    //public Transform limbGroup;
+
+    [Header("Type")]
+    public COLOR mainColor = COLOR.RED;
+
     [Header("Main Part")]
     public PartController part_LeftEye;
     public PartController part_RightEye;
     public PartController part_Mouth;
 
     [Header("Reference")]
-    public GameObject obj_Core;
+    public SpriteRenderer sr_body ;
     public Transform subPartGroup;
 
     public List<PartController> subParts = new List<PartController>();
@@ -77,6 +84,18 @@ public class PlayerFacialManager : MonoBehaviour
         else return false;
     }
 
+    public void SetBodyType(int index){
+        sr_body.sprite = PartData.instance.GetBobySprites(mainColor)[index];
+
+        Squish();
+
+    }
+
+    public void RandomBodyType(){
+        var pool = PartData.instance.GetBobySprites(mainColor);
+        SetBodyType(Random.Range(0,pool.Count));
+    }
+
     public void RandomPart(int facial)
     {
         RandomPart((FACIAL_PART)facial);
@@ -127,24 +146,42 @@ public class PlayerFacialManager : MonoBehaviour
             coreTween.Stop(TweenStopBehavior.Complete);
         }
 
-        obj_Core.transform.localScale = Vector3.one * 0.8f;
+        sr_body.transform.localScale = Vector3.one * 0.8f;
         System.Action<ITween<Vector3>> onUpdate = (t) =>
         {
-            obj_Core.transform.localScale = t.CurrentValue;
+            sr_body.transform.localScale = t.CurrentValue;
         };
 
         System.Action<ITween<Vector3>> onComplete = (t) =>
         {
-            obj_Core.transform.localScale = t.CurrentValue;
+            sr_body.transform.localScale = t.CurrentValue;
         };
 
-        coreTween = obj_Core.Tween(null, Vector3.one * 0.8f, Vector3.one, 1f, TweenScaleFunctions.EaseOutElastic, onUpdate, onComplete);
+        coreTween = sr_body.gameObject.Tween(null, Vector3.one * 0.8f, Vector3.one, 1f, TweenScaleFunctions.EaseOutElastic, onUpdate, onComplete);
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        
+
+       //var distance = 1f;
+       //
+       //var division = 12f;
+       //
+       //var delta = Mathf.PI * 2 / division;
+       //
+       //for (int i = 0; i < division; i++)
+       //{
+       //    var pos = new Vector2(
+       //        distance * Mathf.Cos(delta * i),
+       //        distance * Mathf.Sin(delta * i)
+       //        );
+       //    var clone = Instantiate(pivot, limbGroup);
+       //    clone.transform.localPosition = (Vector3)pos;
+       //    clone.transform.Rotate(0f, 0f, delta * i * Mathf.Rad2Deg + 90);
+       //}
+
+
     }
 
     // Update is called once per frame
@@ -154,10 +191,26 @@ public class PlayerFacialManager : MonoBehaviour
     }
 }
 
+public enum COLOR
+{
+    BLUE,
+    BROWN,
+    GREEN,
+    RED,
+    WHITE,
+    YELLOW
+}
 
 public enum FACIAL_PART
 {
     LEFT_EYE,
     RIGHT_EYE,
     MOUTH
+}
+
+public enum LIMB_PART
+{
+    ARM,
+    LEG,
+    DETAIL
 }
