@@ -2,71 +2,132 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DigitalRuby.Tween;
+using System.Linq;
 
 public class PlayerFacialManager : MonoBehaviour
 {
-
-    [Header("SpritesList")]
-
-    //public List<Sprite> leftEye_sprites = new List<Sprite>();
-    //public List<Sprite> rightEye_sprites = new List<Sprite>();
-    public List<Sprite> eye_sprites = new List<Sprite>();
-    public List<Sprite> mouth_sprites = new List<Sprite>();
+    [Header("Main Part")]
+    public PartController part_LeftEye;
+    public PartController part_RightEye;
+    public PartController part_Mouth;
 
     [Header("Reference")]
-    public SpriteRenderer sr_LeftEye;
-    public SpriteRenderer sr_RightEye;
-    public SpriteRenderer sr_Mouth;
-
     public GameObject obj_Core;
+    public Transform subPartGroup;
+
+    public List<PartController> subParts = new List<PartController>();
+
+    public int max_subPart = 10;
+
+    public void AddSubPart()
+    {
+        if (subParts.Count >= max_subPart) return;
+
+        var pos = NewPartPosition();
+
+        var clone = Instantiate(PartData.instance.part_prefab, subPartGroup);
+        clone.transform.position = pos;
+        var partController = clone.GetComponent<PartController>();
+
+        partController.SetType((FACIAL_PART)Random.Range(0, 3));
+        partController.RandomPart();
+
+        subParts.Add(partController);
+
+        Squish();
+
+    }
+
+    public Vector3 NewPartPosition()
+    {
+        var pos = transform.position;
+
+        for (int i = 0; i < 1000; i++)
+        {
+            pos = transform.position + (Vector3)(Random.insideUnitCircle * PartData.instance.newPartRandomDistance);
+            var result = CheckInsideOtherPart(pos,0.3f) ;
+            if (!result)
+            {
+                //Debug.Log("found");
+                break;
+            }
+        }
+
+        //do
+        //{
+        //    pos = transform.position + (Vector3)(Random.insideUnitCircle * PartData.instance.newPartRandomDistance);
+        //} while (CheckInsideOtherPart(pos, 1f));
+
+        return pos;
+    }
+
+    public bool CheckInsideOtherPart(Vector2 pos, float radius){
+        var colliders = Physics2D.OverlapCircleAll(pos, radius).ToList<Collider2D>();
+        //Debug.Log("colliders count:" + colliders.Count);
+        var colliders_filtered = new List<Collider2D>();
+        foreach(var collider in colliders)
+        {
+            //Debug.Log(collider.name);
+            if(collider.CompareTag("Part")) colliders_filtered.Add(collider);
+        }
+
+        //Debug.Log("filtered count: "+colliders_filtered.Count);
+
+        if(colliders_filtered.Count > 0 ) return true;
+        else return false;
+    }
 
     public void RandomPart(int facial)
     {
-        RandomPart((FACIAL)facial);
+        RandomPart((FACIAL_PART)facial);
 
     }
 
-    public void RandomPart(FACIAL facial)
-    {
-
-        List<Sprite> pool = new List<Sprite>();
-
-        switch (facial)
-        {
-            case FACIAL.LEFT_EYE:
-            case FACIAL.RIGHT_EYE:
-                pool = eye_sprites;
-                break;
-            case FACIAL.MOUTH:
-                pool = mouth_sprites;
-                break;
-        }
-
-
-        SwapPart(facial, Random.Range(0, pool.Count));
-
-    }
-
-    public void SwapPart(FACIAL facial, int index)
+    public void RandomPart(FACIAL_PART facial)
     {
         switch (facial)
         {
-            case FACIAL.LEFT_EYE:
-                sr_LeftEye.sprite = eye_sprites[index];
+            case FACIAL_PART.LEFT_EYE:
+                part_LeftEye.RandomPart();
                 break;
-            case FACIAL.RIGHT_EYE:
-                sr_RightEye.sprite = eye_sprites[index];
+            case FACIAL_PART.RIGHT_EYE:
+                part_RightEye.RandomPart();
                 break;
-            case FACIAL.MOUTH:
-                sr_Mouth.sprite = mouth_sprites[index];
+            case FACIAL_PART.MOUTH:
+                part_Mouth.RandomPart();
                 break;
         }
         Squish();
     }
 
+    public void SetPart(FACIAL_PART facial, int index)
+    {
+        switch (facial)
+        {
+            case FACIAL_PART.LEFT_EYE:
+                part_LeftEye.SetPart(index);
+                break;
+            case FACIAL_PART.RIGHT_EYE:
+                part_RightEye.SetPart(index);
+                break;
+            case FACIAL_PART.MOUTH:
+                part_Mouth.SetPart(index);
+                break;
+        }
+        Squish();
+    }
+
+    Vector3Tween coreTween;
+
     public void Squish()
     {
 
+        if(coreTween != null)
+        {
+            coreTween.Stop(TweenStopBehavior.Complete);
+        }
+
+        obj_Core.transform.localScale = Vector3.one * 0.8f;
         System.Action<ITween<Vector3>> onUpdate = (t) =>
         {
             obj_Core.transform.localScale = t.CurrentValue;
@@ -77,7 +138,7 @@ public class PlayerFacialManager : MonoBehaviour
             obj_Core.transform.localScale = t.CurrentValue;
         };
 
-        obj_Core.Tween("SquishTween", Vector3.one * 0.8f, Vector3.one, 1f, TweenScaleFunctions.EaseOutElastic, onUpdate, onComplete);
+        coreTween = obj_Core.Tween(null, Vector3.one * 0.8f, Vector3.one, 1f, TweenScaleFunctions.EaseOutElastic, onUpdate, onComplete);
     }
 
     // Start is called before the first frame update
@@ -91,11 +152,12 @@ public class PlayerFacialManager : MonoBehaviour
     {
         
     }
+}
 
-    public enum FACIAL
-    {
-        LEFT_EYE,
-        RIGHT_EYE,
-        MOUTH
-    }
+
+public enum FACIAL_PART
+{
+    LEFT_EYE,
+    RIGHT_EYE,
+    MOUTH
 }
