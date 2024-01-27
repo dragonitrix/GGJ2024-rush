@@ -843,7 +843,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &203390584
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3106,7 +3106,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 45
+  field of view: 60
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -3131,8 +3131,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 546351255}
-  m_LocalRotation: {x: 0, y: -0.57086515, z: 0, w: 0.82104385}
-  m_LocalPosition: {x: 46.37, y: 13.7, z: -7.84}
+  m_LocalRotation: {x: -5.127551e-16, y: 0.011892429, z: -6.0982637e-18, w: -0.9999293}
+  m_LocalPosition: {x: 1.47, y: 5.23, z: -15.12}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3159,10 +3159,15 @@ PlayableDirector:
     value: {fileID: 546351260}
   m_ExposedReferences:
     m_References:
+    - 5e0820fa12b325743a11469fff706a69: {fileID: 203390584}
     - be9a3726100079e44b25baa6994a638b: {fileID: 2031104234}
+    - acb202cf9618b9a45ab10ca2bd58cc17: {fileID: 1610904075}
+    - 040fd0eb8f1781d44a78ec34fbd269fd: {fileID: 206622546}
     - cb3720ab127e79a4bb02e66a49b53845: {fileID: 1067639408}
     - 6d6221e2862ccf847ae200e6dc375967: {fileID: 2031104234}
     - 5799ef376c60dab48b719680ec38f574: {fileID: 203390584}
+    - 9eae1f48410586a4c9dfbae827712550: {fileID: 1028731539}
+    - b59550596ff57b24ca759bccd333a6d8: {fileID: 66977124}
 --- !u!114 &546351260
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11965,7 +11970,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2031104233}
   m_LocalRotation: {x: -0.008757417, y: -0.5388677, z: -0.0056024524, w: 0.8423262}
-  m_LocalPosition: {x: 5.4699993, y: 4.5, z: -16.81}
+  m_LocalPosition: {x: 5.151291, y: 4.5, z: -18.231722}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
