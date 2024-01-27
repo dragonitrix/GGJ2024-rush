@@ -14,9 +14,13 @@ public class PlayerFacialManager : MonoBehaviour
     public PartController part_RightEye;
     public PartController part_Mouth;
 
+    [Header("Transforms")]
+    public Transform bodyGroup;
+    public Transform subPartGroup;
+    public Transform limbGroup;
+
     [Header("Reference")]
     public SpriteRenderer sr_body;
-    public Transform subPartGroup;
 
     public List<PartController> subParts = new List<PartController>();
 
@@ -32,7 +36,6 @@ public class PlayerFacialManager : MonoBehaviour
 
     public List<LimbController> subLimbs = new List<LimbController>();
 
-    public Transform limbGroup;
 
     public int max_subPart = 10;
 
@@ -299,7 +302,7 @@ public class PlayerFacialManager : MonoBehaviour
         var subLimbs_shuffle = ShuffleList(subLimbs);
 
 
-        foreach(var subLimb in subLimbs_shuffle)
+        foreach (var subLimb in subLimbs_shuffle)
         {
             if (subLimb.isEmpty)
             {
@@ -464,8 +467,42 @@ public class PlayerFacialManager : MonoBehaviour
     //    }
     //}
 
+    float elapsed = 0f;
+    float body_elapsed = 0f;
+
     // Update is called once per frame
-    void Update() { }
+    void Update()
+    {
+
+        elapsed += Time.deltaTime;
+        if (elapsed >= 10000f)
+        {
+            elapsed -= 10000f;
+        }
+        body_elapsed += Time.deltaTime * 3f;
+        if (body_elapsed >= 10000f)
+        {
+            body_elapsed -= 10000f;
+        }
+
+        var xPos = transform.position.x * 1.5f;
+
+        var distance = 0.5f;
+
+        var l_Yoffset = Mathf.Sin(xPos) * distance;
+        var r_Yoffset = Mathf.Sin(xPos + Mathf.PI) * distance;
+
+        limb_LeftLeg.spriteRenderer.transform.localPosition = new Vector3(0, l_Yoffset, 0);
+        limb_RightLeg.spriteRenderer.transform.localPosition = new Vector3(0, r_Yoffset, 0);
+
+
+        var body_Yoffset = Mathf.Sin(body_elapsed) * 0.05f;
+        bodyGroup.transform.localPosition = new Vector3(0, body_Yoffset, 0);
+
+
+
+
+    }
 
     List<T> ShuffleList<T>(List<T> list)
     {
