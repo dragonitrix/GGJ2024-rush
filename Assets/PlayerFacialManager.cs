@@ -177,40 +177,46 @@ public class PlayerFacialManager : MonoBehaviour
 
 
     }
-    [ContextMenu("SetLimbPos")]
-    public void SetLimbPos()
-    {
-        var distance = 0.7f;
-        var division = limbs.Count;
-        var delta = Mathf.PI * 2 / division;
 
-        for (int i = 0; i < division; i++)
-        {
-
-            var clone = limbs[i].gameObject;
-
-            var pos = new Vector2(
-                distance * Mathf.Cos(delta * i),
-                distance * Mathf.Sin(delta * i)
-                );
-
-            clone.transform.localPosition = (Vector3)pos;
-            clone.transform.Rotate(0f, 0f, delta * i * Mathf.Rad2Deg + 90);
-        }
-
-
-        limb_LeftArm.transform.rotation = Quaternion.Euler(Vector3.zero);
-        limb_RightArm.transform.rotation = Quaternion.Euler(Vector3.zero);
-        limb_LeftLeg.transform.rotation = Quaternion.Euler(Vector3.zero);
-        limb_RightLeg.transform.rotation = Quaternion.Euler(Vector3.zero);
-        limb_LeftEar.transform.rotation = Quaternion.Euler(Vector3.zero);
-        limb_RightEar.transform.rotation = Quaternion.Euler(Vector3.zero);
-
-        limb_LeftArm.spriteRenderer.flipX = true;
-        limb_LeftLeg.spriteRenderer.flipX = true;
-        limb_LeftEar.spriteRenderer.flipX = true;
-
-    }
+    //[ContextMenu("SetLimbPos")]
+    //public void SetLimbPos()
+    //{
+    //    var distance = 0.7f;
+    //    var division = limbs.Count;
+    //    var delta = Mathf.PI * 2 / division;
+    //
+    //    for (int i = 0; i < division; i++)
+    //    {
+    //
+    //        var clone = limbs[i].gameObject;
+    //
+    //        var pos = new Vector2(
+    //            distance * Mathf.Cos(delta * i),
+    //            distance * Mathf.Sin(delta * i)
+    //            );
+    //
+    //        clone.transform.localPosition = (Vector3)pos;
+    //        clone.transform.Rotate(0f, 0f, delta * i * Mathf.Rad2Deg + 90);
+    //    }
+    //
+    //
+    //    limb_LeftArm.transform.rotation = Quaternion.Euler(Vector3.zero);
+    //    limb_RightArm.transform.rotation = Quaternion.Euler(Vector3.zero);
+    //    limb_LeftLeg.transform.rotation = Quaternion.Euler(Vector3.zero);
+    //    limb_RightLeg.transform.rotation = Quaternion.Euler(Vector3.zero);
+    //    limb_LeftEar.transform.rotation = Quaternion.Euler(Vector3.zero);
+    //    limb_RightEar.transform.rotation = Quaternion.Euler(Vector3.zero);
+    //
+    //    limb_LeftArm.spriteRenderer.flipX = true;
+    //    limb_LeftLeg.spriteRenderer.flipX = true;
+    //    limb_LeftEar.spriteRenderer.flipX = true;
+    //
+    //    foreach(var limb in limbs)
+    //    {
+    //        limb.SetPartDefault();
+    //    }
+    //
+    //}
 
     //public GameObject pivot;
     //
@@ -265,6 +271,7 @@ public enum FACIAL_PART
 
 public enum LIMB_PART
 {
+    NONE,
     ARM,
     LEG,
     DETAIL

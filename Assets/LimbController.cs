@@ -30,7 +30,22 @@ public class LimbController : MonoBehaviour
     [ContextMenu("SetPartDefault")]
     public void SetPartDefault()
     {
-        spriteRenderer.sprite = null;
+
+        switch (type)
+        {
+            case LIMB_PART.NONE:
+            default:
+                spriteRenderer.sprite = null;
+                break;
+            case LIMB_PART.ARM:
+            case LIMB_PART.LEG:
+            case LIMB_PART.DETAIL:
+                //RandomPart();
+                SetPart(0);
+                break;
+
+        }
+
     }
 
     public void RandomPart(bool skipAnim = false)
@@ -65,7 +80,7 @@ public class LimbController : MonoBehaviour
         {
             squishTween.Stop(TweenStopBehavior.Complete);
         }
-        spriteRenderer.transform.localScale = Vector3.one * 0.8f;
+        spriteRenderer.transform.localScale = Vector3.one * 5f * 0.8f;
         System.Action<ITween<Vector3>> onUpdate = (t) =>
         {
             spriteRenderer.transform.localScale = t.CurrentValue;
@@ -76,6 +91,6 @@ public class LimbController : MonoBehaviour
             spriteRenderer.transform.localScale = t.CurrentValue;
         };
 
-         squishTween = spriteRenderer.gameObject.Tween(null, Vector3.one * 0.8f, Vector3.one, 1f, TweenScaleFunctions.EaseOutElastic, onUpdate, onComplete);
+         squishTween = spriteRenderer.gameObject.Tween(null, Vector3.one * 0.8f * 5f, Vector3.one * 5f, 1f, TweenScaleFunctions.EaseOutElastic, onUpdate, onComplete);
     }
 }
