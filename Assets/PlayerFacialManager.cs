@@ -29,6 +29,9 @@ public class PlayerFacialManager : MonoBehaviour
     public LimbController limb_RightLeg;
     public LimbController limb_LeftEar;
     public LimbController limb_RightEar;
+
+    public List<LimbController> subLimbs = new List<LimbController>();
+
     public Transform limbGroup;
 
     public int max_subPart = 10;
@@ -37,6 +40,113 @@ public class PlayerFacialManager : MonoBehaviour
     public void TesttAdd()
     {
         AddPart(FACIAL_PART.LEFT_EYE, 0);
+    }
+    [ContextMenu("TestAdd Limb")]
+    public void TesttAddLimb()
+    {
+        AddLimb(LIMB_PART.ARM, 0);
+    }
+
+    public void RemovePart()
+    {
+
+        var result = Random.Range(0, 2);
+
+        if (result == 0)
+        {
+            RemoveFacial();
+        }
+        else
+        {
+            RemoveLimb();
+        }
+
+
+    }
+
+    public void RemoveFacial()
+    {
+
+        if (subParts.Count > 0)
+        {
+            // remove sub first
+            var sub = subParts[subParts.Count - 1];
+            subParts.Remove(sub);
+            sub.Kill();
+        }
+        else
+        {
+            // remove main facial by order
+
+            if (!part_Mouth.isEmpty)
+            {
+                part_Mouth.RemovePart();
+                return;
+            }
+            if (!part_RightEye.isEmpty)
+            {
+                part_RightEye.RemovePart();
+                return;
+            }
+            if (!part_LeftEye.isEmpty)
+            {
+                part_LeftEye.RemovePart();
+                return;
+            }
+        }
+
+    }
+
+    public void RemoveLimb()
+    {
+
+        bool noSubLimb = true;
+
+        foreach (var subLimb in subLimbs)
+        {
+            if (!subLimb.isEmpty)
+            {
+                subLimb.RemovePart();
+                noSubLimb = false;
+                break;
+            }
+        }
+
+
+        if (!noSubLimb) return;
+
+
+        if (!limb_LeftArm.isEmpty)
+        {
+            limb_LeftArm.RemovePart();
+            return;
+        }
+        if (!limb_RightArm.isEmpty)
+        {
+            limb_RightArm.RemovePart();
+            return;
+        }
+        if (!limb_LeftLeg.isEmpty)
+        {
+            limb_LeftLeg.RemovePart();
+            return;
+        }
+        if (!limb_RightLeg.isEmpty)
+        {
+            limb_RightLeg.RemovePart();
+            return;
+        }
+        if (!limb_LeftEar.isEmpty)
+        {
+            limb_LeftEar.RemovePart();
+            return;
+        }
+        if (!limb_RightEar.isEmpty)
+        {
+            limb_RightEar.RemovePart();
+            return;
+        }
+
     }
 
     public void AddPart(FACIAL_PART type, int index)
@@ -57,7 +167,7 @@ public class PlayerFacialManager : MonoBehaviour
                 }
                 else
                 {
-                    AddSubPart(type,index);
+                    AddSubPart(type, index);
                 }
                 break;
             case FACIAL_PART.MOUTH:
@@ -141,6 +251,64 @@ public class PlayerFacialManager : MonoBehaviour
             return true;
         else
             return false;
+    }
+
+    public void AddLimb(LIMB_PART type, int index)
+    {
+
+        switch (type)
+        {
+            case LIMB_PART.ARM:
+                if (limb_LeftArm.isEmpty)
+                {
+                    limb_LeftArm.SetPart(index);
+                    return;
+                }
+                if (limb_RightArm.isEmpty)
+                {
+                    limb_RightArm.SetPart(index);
+                    return;
+                }
+                break;
+            case LIMB_PART.LEG:
+                if (limb_LeftLeg.isEmpty)
+                {
+                    limb_LeftLeg.SetPart(index);
+                    return;
+                }
+                if (limb_RightLeg.isEmpty)
+                {
+                    limb_RightLeg.SetPart(index);
+                    return;
+                }
+                break;
+            case LIMB_PART.DETAIL:
+                if (limb_LeftEar.isEmpty)
+                {
+                    limb_LeftEar.SetPart(index);
+                    return;
+                }
+                if (limb_RightEar.isEmpty)
+                {
+                    limb_RightEar.SetPart(index);
+                    return;
+                }
+                break;
+        }
+
+        var subLimbs_shuffle = ShuffleList(subLimbs);
+
+
+        foreach(var subLimb in subLimbs_shuffle)
+        {
+            if (subLimb.isEmpty)
+            {
+                subLimb.SetPart(type, index);
+                subLimb.spriteRenderer.flipX = (Random.Range(0, 2) == 1) ? true : false;
+                return;
+            }
+        }
+
     }
 
     public void SetBodyType(int index)
@@ -298,6 +466,26 @@ public class PlayerFacialManager : MonoBehaviour
 
     // Update is called once per frame
     void Update() { }
+
+    List<T> ShuffleList<T>(List<T> list)
+    {
+        List<T> shuffledList = new List<T>(list); // Create a new list with the same elements
+
+        int n = shuffledList.Count;
+        System.Random random = new System.Random();
+
+        while (n > 1)
+        {
+            n--;
+            int k = random.Next(n + 1);
+            T value = shuffledList[k];
+            shuffledList[k] = shuffledList[n];
+            shuffledList[n] = value;
+        }
+
+        return shuffledList;
+    }
+
 }
 
 public enum COLOR
@@ -319,7 +507,6 @@ public enum FACIAL_PART
 
 public enum LIMB_PART
 {
-    NONE,
     ARM,
     LEG,
     DETAIL

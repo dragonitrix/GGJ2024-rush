@@ -71,11 +71,25 @@ public class PartController : MonoBehaviour
         //random pos
         spriteRenderer.transform.localPosition = Random.insideUnitCircle * PartData.instance.partPosRandomDistance;
 
+        //random angle
+        spriteRenderer.transform.Rotate(0, 0, Random.Range(-10f, 10f));
+
         if (!skipAnim)
         {
             Squish();
         }
 
+    }
+
+    public void Kill()
+    {
+
+        if (squishTween != null)
+        {
+            squishTween.Stop(TweenStopBehavior.Complete);
+        }
+
+        Destroy(this.gameObject);
     }
 
     Vector3Tween squishTween;

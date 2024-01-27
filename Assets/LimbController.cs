@@ -5,6 +5,7 @@ using DigitalRuby.Tween;
 
 public class LimbController : MonoBehaviour
 {
+    public bool isEmpty = false;
     public COLOR color;
     public LIMB_PART type;
     public SpriteRenderer spriteRenderer;
@@ -33,7 +34,7 @@ public class LimbController : MonoBehaviour
 
         switch (type)
         {
-            case LIMB_PART.NONE:
+            //case LIMB_PART.NONE:
             default:
                 spriteRenderer.sprite = null;
                 break;
@@ -55,10 +56,16 @@ public class LimbController : MonoBehaviour
         SetPart(randResult, skipAnim);
 
     }
+    public void SetPart(LIMB_PART type,int index, bool skipAnim = false)
+    {
+        SetType(type);
+        SetPart(index, skipAnim);
+    }
     public void SetPart(int index, bool skipAnim = false)
     {
-        spriteRenderer.sprite = PartData.instance.GetLimb(color,type)[index];
 
+        isEmpty = false;
+        spriteRenderer.sprite = PartData.instance.GetLimb(color,type)[index];
         //random pos
         spriteRenderer.transform.localPosition = Random.insideUnitCircle * PartData.instance.partPosRandomDistance;
 
@@ -69,6 +76,13 @@ public class LimbController : MonoBehaviour
             Squish();
         }
 
+    }
+
+    public void RemovePart()
+    {
+        isEmpty = true;
+        spriteRenderer.sprite = null;
+        spriteRenderer.flipX = false;
     }
 
     Vector3Tween squishTween;
