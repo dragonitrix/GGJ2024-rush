@@ -49,10 +49,10 @@ public class PlayerFacialManager : MonoBehaviour
     [ContextMenu("TestAdd Limb")]
     public void TesttAddLimb()
     {
-        AddLimb(LIMB_PART.ARM, 0);
+        AddPart(LIMB_PART.ARM, 0);
     }
 
-    public void RemovePart( bool anim = true)
+    public void RemovePart(bool anim = true)
     {
         var result = Random.Range(0, 2);
         if (result == 0)
@@ -64,7 +64,8 @@ public class PlayerFacialManager : MonoBehaviour
             RemoveLimb();
         }
 
-        if(anim){
+        if (anim)
+        {
             BodyFlash();
             Squish();
         }
@@ -200,7 +201,11 @@ public class PlayerFacialManager : MonoBehaviour
         var force = ejectForce;
         rb_part.AddForce(dir * force, ForceMode2D.Impulse);
 
-        Destroy(rb_part.gameObject,5f);
+        Destroy(rb_part.gameObject, 5f);
+    }
+
+    public void AddPart(PartDetail detail){
+        AddPart(detail.type,detail.partIndex);
     }
 
     public void AddPart(FACIAL_PART type, int index)
@@ -235,6 +240,68 @@ public class PlayerFacialManager : MonoBehaviour
                 }
                 break;
         }
+    }
+
+    public void AddPart(LimbDetail detail){
+        AddPart(detail.type,detail.partIndex);
+    }
+
+    public void AddPart(LIMB_PART type, int index)
+    {
+
+        switch (type)
+        {
+            case LIMB_PART.ARM:
+                if (limb_LeftArm.isEmpty)
+                {
+                    limb_LeftArm.SetPart(index);
+                    return;
+                }
+                if (limb_RightArm.isEmpty)
+                {
+                    limb_RightArm.SetPart(index);
+                    return;
+                }
+                break;
+            case LIMB_PART.LEG:
+                if (limb_LeftLeg.isEmpty)
+                {
+                    limb_LeftLeg.SetPart(index);
+                    return;
+                }
+                if (limb_RightLeg.isEmpty)
+                {
+                    limb_RightLeg.SetPart(index);
+                    return;
+                }
+                break;
+            case LIMB_PART.DETAIL:
+                if (limb_LeftEar.isEmpty)
+                {
+                    limb_LeftEar.SetPart(index);
+                    return;
+                }
+                if (limb_RightEar.isEmpty)
+                {
+                    limb_RightEar.SetPart(index);
+                    return;
+                }
+                break;
+        }
+
+        var subLimbs_shuffle = ShuffleList(subLimbs);
+
+
+        foreach (var subLimb in subLimbs_shuffle)
+        {
+            if (subLimb.isEmpty)
+            {
+                subLimb.SetPart(type, index);
+                subLimb.spriteRenderer.flipX = (Random.Range(0, 2) == 1) ? true : false;
+                return;
+            }
+        }
+
     }
 
     public void AddSubPart()
@@ -307,63 +374,6 @@ public class PlayerFacialManager : MonoBehaviour
             return false;
     }
 
-    public void AddLimb(LIMB_PART type, int index)
-    {
-
-        switch (type)
-        {
-            case LIMB_PART.ARM:
-                if (limb_LeftArm.isEmpty)
-                {
-                    limb_LeftArm.SetPart(index);
-                    return;
-                }
-                if (limb_RightArm.isEmpty)
-                {
-                    limb_RightArm.SetPart(index);
-                    return;
-                }
-                break;
-            case LIMB_PART.LEG:
-                if (limb_LeftLeg.isEmpty)
-                {
-                    limb_LeftLeg.SetPart(index);
-                    return;
-                }
-                if (limb_RightLeg.isEmpty)
-                {
-                    limb_RightLeg.SetPart(index);
-                    return;
-                }
-                break;
-            case LIMB_PART.DETAIL:
-                if (limb_LeftEar.isEmpty)
-                {
-                    limb_LeftEar.SetPart(index);
-                    return;
-                }
-                if (limb_RightEar.isEmpty)
-                {
-                    limb_RightEar.SetPart(index);
-                    return;
-                }
-                break;
-        }
-
-        var subLimbs_shuffle = ShuffleList(subLimbs);
-
-
-        foreach (var subLimb in subLimbs_shuffle)
-        {
-            if (subLimb.isEmpty)
-            {
-                subLimb.SetPart(type, index);
-                subLimb.spriteRenderer.flipX = (Random.Range(0, 2) == 1) ? true : false;
-                return;
-            }
-        }
-
-    }
 
     public void SetBodyType(int index)
     {
