@@ -2,9 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DigitalRuby.Tween;
+using Unity.VisualScripting;
 
 public class PartController : MonoBehaviour
 {
+    public bool isEmpty = false;
+
+    public int partIndex;
     public FACIAL_PART type;
     public SpriteRenderer spriteRenderer;
 
@@ -17,14 +21,19 @@ public class PartController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
+    [ContextMenu("RemovePart")]
+    public void RemovePart()
+    {
+        isEmpty = true;
+        spriteRenderer.sprite = null;
+    }
 
     public void SetType(FACIAL_PART type)
     {
         this.type = type;
-
     }
 
     [ContextMenu("SetPartDefault")]
@@ -36,12 +45,27 @@ public class PartController : MonoBehaviour
     public void RandomPart(bool skipAnim = false)
     {
         var pool = PartData.instance.GetPartSprites(type);
+        if (pool == null)
+        {
+            spriteRenderer.sprite = null;
+            return;
+        }
         var randResult = Random.Range(0, pool.Count);
         SetPart(randResult, skipAnim);
 
     }
     public void SetPart(int index, bool skipAnim = false)
     {
+        var pool = PartData.instance.GetPartSprites(type);
+        if (pool == null)
+        {
+            RemovePart();
+            return;
+        }
+
+        isEmpty = false;
+
+        partIndex = index;
         spriteRenderer.sprite = PartData.instance.GetPartSprites(type)[index];
 
         //random pos
@@ -59,7 +83,7 @@ public class PartController : MonoBehaviour
     public void Squish()
     {
 
-        if(squishTween != null)
+        if (squishTween != null)
         {
             squishTween.Stop(TweenStopBehavior.Complete);
         }
@@ -74,6 +98,6 @@ public class PartController : MonoBehaviour
             spriteRenderer.transform.localScale = t.CurrentValue;
         };
 
-         squishTween = spriteRenderer.gameObject.Tween(null, Vector3.one * 0.8f, Vector3.one, 1f, TweenScaleFunctions.EaseOutElastic, onUpdate, onComplete);
+        squishTween = spriteRenderer.gameObject.Tween(null, Vector3.one * 0.8f, Vector3.one, 1f, TweenScaleFunctions.EaseOutElastic, onUpdate, onComplete);
     }
 }

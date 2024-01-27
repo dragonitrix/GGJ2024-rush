@@ -1,12 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using DigitalRuby.Tween;
 using System.Linq;
+using DigitalRuby.Tween;
+using UnityEngine;
 
 public class PlayerFacialManager : MonoBehaviour
 {
-
     [Header("Type")]
     public COLOR mainColor = COLOR.RED;
 
@@ -34,9 +33,55 @@ public class PlayerFacialManager : MonoBehaviour
 
     public int max_subPart = 10;
 
+    [ContextMenu("TestAdd")]
+    public void TesttAdd()
+    {
+        AddPart(FACIAL_PART.LEFT_EYE, 0);
+    }
+
+    public void AddPart(FACIAL_PART type, int index)
+    {
+        // check if facial is empty
+
+        switch (type)
+        {
+            case FACIAL_PART.LEFT_EYE:
+            case FACIAL_PART.RIGHT_EYE:
+                if (part_LeftEye.isEmpty)
+                {
+                    part_LeftEye.SetPart(index);
+                }
+                else if (part_RightEye.isEmpty)
+                {
+                    part_RightEye.SetPart(index);
+                }
+                else
+                {
+                    AddSubPart(type,index);
+                }
+                break;
+            case FACIAL_PART.MOUTH:
+                if (part_Mouth.isEmpty)
+                {
+                    part_Mouth.SetPart(index);
+                }
+                else
+                {
+                    AddSubPart(type, index);
+                }
+                break;
+        }
+    }
+
     public void AddSubPart()
     {
-        if (subParts.Count >= max_subPart) return;
+        AddSubPart((FACIAL_PART)Random.Range(0, 3));
+    }
+
+    public void AddSubPart(FACIAL_PART type, int index = -1)
+    {
+        if (subParts.Count >= max_subPart)
+            return;
 
         var pos = NewPartPosition();
 
@@ -44,13 +89,13 @@ public class PlayerFacialManager : MonoBehaviour
         clone.transform.position = pos;
         var partController = clone.GetComponent<PartController>();
 
-        partController.SetType((FACIAL_PART)Random.Range(0, 3));
-        partController.RandomPart();
+        partController.SetType(type);
+        if (index == -1) partController.RandomPart();
+        else partController.SetPart(index);
 
         subParts.Add(partController);
 
         Squish();
-
     }
 
     public Vector3 NewPartPosition()
@@ -59,7 +104,9 @@ public class PlayerFacialManager : MonoBehaviour
 
         for (int i = 0; i < 1000; i++)
         {
-            pos = transform.position + (Vector3)(Random.insideUnitCircle * PartData.instance.newPartRandomDistance);
+            pos =
+                transform.position
+                + (Vector3)(Random.insideUnitCircle * PartData.instance.newPartRandomDistance);
             var result = CheckInsideOtherPart(pos, 0.3f);
             if (!result)
             {
@@ -84,13 +131,16 @@ public class PlayerFacialManager : MonoBehaviour
         foreach (var collider in colliders)
         {
             //Debug.Log(collider.name);
-            if (collider.CompareTag("Part")) colliders_filtered.Add(collider);
+            if (collider.CompareTag("Part"))
+                colliders_filtered.Add(collider);
         }
 
         //Debug.Log("filtered count: "+colliders_filtered.Count);
 
-        if (colliders_filtered.Count > 0) return true;
-        else return false;
+        if (colliders_filtered.Count > 0)
+            return true;
+        else
+            return false;
     }
 
     public void SetBodyType(int index)
@@ -98,7 +148,6 @@ public class PlayerFacialManager : MonoBehaviour
         sr_body.sprite = PartData.instance.GetBobySprites(mainColor)[index];
 
         Squish();
-
     }
 
     public void RandomBodyType()
@@ -110,7 +159,6 @@ public class PlayerFacialManager : MonoBehaviour
     public void RandomPart(int facial)
     {
         RandomPart((FACIAL_PART)facial);
-
     }
 
     public void RandomPart(FACIAL_PART facial)
@@ -151,7 +199,6 @@ public class PlayerFacialManager : MonoBehaviour
 
     public void Squish()
     {
-
         if (coreTween != null)
         {
             coreTween.Stop(TweenStopBehavior.Complete);
@@ -168,15 +215,19 @@ public class PlayerFacialManager : MonoBehaviour
             sr_body.transform.localScale = t.CurrentValue;
         };
 
-        coreTween = sr_body.gameObject.Tween(null, Vector3.one * 0.8f, Vector3.one, 1f, TweenScaleFunctions.EaseOutElastic, onUpdate, onComplete);
+        coreTween = sr_body.gameObject.Tween(
+            null,
+            Vector3.one * 0.8f,
+            Vector3.one,
+            1f,
+            TweenScaleFunctions.EaseOutElastic,
+            onUpdate,
+            onComplete
+        );
     }
 
     // Start is called before the first frame update
-    void Start()
-    {
-
-
-    }
+    void Start() { }
 
     //[ContextMenu("SetLimbPos")]
     //public void SetLimbPos()
@@ -246,10 +297,7 @@ public class PlayerFacialManager : MonoBehaviour
     //}
 
     // Update is called once per frame
-    void Update()
-    {
-
-    }
+    void Update() { }
 }
 
 public enum COLOR
