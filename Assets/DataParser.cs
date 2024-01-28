@@ -18,6 +18,7 @@ public class DataParser : MonoBehaviour
 
 
     public AllPartDetail partDetail;
+    public int lastEndingIndex = 0;
 
     public void SetAllPartDetail(AllPartDetail partDetail){
         this.partDetail = partDetail;

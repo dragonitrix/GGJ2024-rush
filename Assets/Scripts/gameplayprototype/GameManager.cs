@@ -66,16 +66,18 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitForSeconds(timer);
 
-        int endingCount = endingCutscene.Length;
-        float chance = 100 / endingCount;
-        float randomRoll = Random.Range(0f, 100f);
-        for (int i = 0; i < endingCutscene.Length; i++)
-        {
-            if (randomRoll > i * chance && randomRoll < (i + 1) * chance)
-            {
-                SceneManager.LoadScene(endingCutscene[i]);
-                break;
-            }
-        }
+        //int endingCount = endingCutscene.Length;
+        //float chance = 100 / endingCount;
+        //float randomRoll = Random.Range(0f, 100f);
+        //for (int i = 0; i < endingCutscene.Length; i++)
+        //{
+        //    if (randomRoll > i * chance && randomRoll < (i + 1) * chance)
+        //    {
+        //        SceneManager.LoadScene(endingCutscene[i]);
+        //        break;
+        //    }
+        //}
+        SceneManager.LoadScene(endingCutscene[DataParser.instance.lastEndingIndex]);
+        DataParser.instance.lastEndingIndex = DataParser.instance.lastEndingIndex == 0 ? 1 : 0;
     }
 }
