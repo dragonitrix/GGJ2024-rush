@@ -48,23 +48,6 @@ MonoBehaviour:
   VirtualCamera:
     exposedName: cb3720ab127e79a4bb02e66a49b53845
     defaultValue: {fileID: 0}
---- !u!114 &-6541475431581717526
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f10dd60657c6004587f237a7e90f8e4, type: 3}
-  m_Name: AudioPlayableAsset
-  m_EditorClassIdentifier: 
-  m_Clip: {fileID: 8300000, guid: 32d374b7c50dd0047a8bfed6bbb8734f, type: 3}
-  m_Loop: 0
-  m_bufferingTime: 0.1
-  m_ClipProperties:
-    volume: 1
 --- !u!114 &-6324837808926716443
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2453,6 +2436,23 @@ MonoBehaviour:
   m_OpenClipOffsetRotation: {x: 0, y: 0, z: 0, w: 1}
   m_Rotation: {x: 0, y: 0, z: 0, w: 1}
   m_ApplyOffsets: 0
+--- !u!114 &3553672612861490922
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f10dd60657c6004587f237a7e90f8e4, type: 3}
+  m_Name: AudioPlayableAsset
+  m_EditorClassIdentifier: 
+  m_Clip: {fileID: 8300000, guid: c04685a9e445abd4eb6b51ae42745056, type: 3}
+  m_Loop: 0
+  m_bufferingTime: 0.1
+  m_ClipProperties:
+    volume: 1
 --- !u!114 &4188792212801649434
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3685,8 +3685,8 @@ MonoBehaviour:
   - m_Version: 1
     m_Start: 0.05
     m_ClipIn: 0
-    m_Asset: {fileID: -6541475431581717526}
-    m_Duration: 30.42421768707483
+    m_Asset: {fileID: 3553672612861490922}
+    m_Duration: 30.857142857142858
     m_TimeScale: 1
     m_ParentTrack: {fileID: 8517207404969544972}
     m_EaseInDuration: 0
@@ -3750,7 +3750,7 @@ MonoBehaviour:
     m_PreExtrapolationMode: 0
     m_PostExtrapolationTime: 0
     m_PreExtrapolationTime: 0
-    m_DisplayName: Wedding_SFX
+    m_DisplayName: Weddng SFX Mouth
   m_Markers:
     m_Objects: []
   m_TrackProperties:
