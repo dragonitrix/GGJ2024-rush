@@ -595,7 +595,7 @@ MonoBehaviour:
   endingCutscene:
   - {fileID: 102900000, guid: dc58f93cc0a934948af616965d29d3bb, type: 3}
   - {fileID: 102900000, guid: 4210a34d9c7e11449bcbf5c816851c9e, type: 3}
-  facialManager: {fileID: 0}
+  facialManager: {fileID: 1819073577}
 --- !u!4 &1150635976
 Transform:
   m_ObjectHideFlags: 0

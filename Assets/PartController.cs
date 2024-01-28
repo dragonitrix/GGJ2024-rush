@@ -55,6 +55,12 @@ public class PartController : MonoBehaviour
         SetPart(randResult, skipAnim);
 
     }
+
+    public void SetPart(PartDetail detail){
+        SetType(detail.type);
+        SetPart(detail.partIndex);
+    }
+
     public void SetPart(int index, bool skipAnim = false)
     {
         var pool = PartData.instance.GetPartSprites(type);

@@ -27,7 +27,7 @@ public class GameManager : MonoBehaviour
 
     void UpdateTimer()
     {
-        gameTimerCount += Time.fixedDeltaTime;
+        gameTimerCount += Time.deltaTime;
 
         if (gameTimerCount > gameplayTimer || (Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.S)))
         {
@@ -37,8 +37,8 @@ public class GameManager : MonoBehaviour
 
     void GameOver()
     {
-        facialManager.GetAllPartDetail();
-
+        Debug.Log("GameOver");
+        DataParser.instance.SetAllPartDetail(facialManager.GetAllPartDetail());
         RandomEnding();
     }
 
