@@ -577,7 +577,7 @@ public class PlayerFacialManager : MonoBehaviour
 
     float elapsed = 0f;
     float body_elapsed = 0f;
-
+    public bool turnOffLegMovement = false;
     // Update is called once per frame
     void Update()
     {
@@ -603,9 +603,11 @@ public class PlayerFacialManager : MonoBehaviour
         var l_Yoffset = Mathf.Sin(horizontal_movement) * distance;
         var r_Yoffset = Mathf.Sin(horizontal_movement + Mathf.PI) * distance;
 
-        limb_LeftLeg.spriteRenderer.transform.localPosition = new Vector3(0, l_Yoffset, 0);
-        limb_RightLeg.spriteRenderer.transform.localPosition = new Vector3(0, r_Yoffset, 0);
-
+        if (!turnOffLegMovement)
+        {
+            limb_LeftLeg.spriteRenderer.transform.localPosition = new Vector3(0, l_Yoffset, 0);
+            limb_RightLeg.spriteRenderer.transform.localPosition = new Vector3(0, r_Yoffset, 0);
+        }
         var body_Yoffset = Mathf.Sin(body_elapsed) * 0.05f;
         bodyGroup.transform.localPosition = new Vector3(0, body_Yoffset, 0);
 
