@@ -115,6 +115,7 @@ public class LimbController : MonoBehaviour
     public LimbDetail GetLimbDetail()
     {
         LimbDetail detail;
+        detail.isEmpty = isEmpty;
         detail.color = color;
         detail.type = type;
         detail.partIndex = partIndex;
@@ -124,6 +125,7 @@ public class LimbController : MonoBehaviour
 
 public struct LimbDetail
 {
+    public bool isEmpty;
     public COLOR color;
     public LIMB_PART type;
     public int partIndex;

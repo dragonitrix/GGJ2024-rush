@@ -630,6 +630,41 @@ public class PlayerFacialManager : MonoBehaviour
         return shuffledList;
     }
 
+    public void GetAllPartDetail()
+    {
+        AllPartDetail partDetail;
+
+        partDetail.part_LeftEye = part_LeftEye.GetPartDetail();
+        partDetail.part_RightEye = part_RightEye.GetPartDetail();
+        partDetail.part_Mouth = part_Mouth.GetPartDetail();
+
+        partDetail.subParts = new List<PartDetail>();
+
+        foreach (var subPart in subParts)
+        {
+            partDetail.subParts.Add(subPart.GetPartDetail());
+        }
+
+        partDetail.limbs = new List<LimbDetail>();
+
+        foreach (var subLimb in subLimbs)
+        {
+            partDetail.limbs.Add(subLimb.GetLimbDetail());
+        }
+    }
+
+}
+
+public struct AllPartDetail
+{
+    public PartDetail part_LeftEye;
+    public PartDetail part_RightEye;
+    public PartDetail part_Mouth;
+
+    public List<PartDetail> subParts;
+
+    public List<LimbDetail> limbs;
+
 }
 
 public enum COLOR
