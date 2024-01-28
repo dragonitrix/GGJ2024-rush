@@ -182,14 +182,14 @@ public class PlayerFacialManager : MonoBehaviour
 
     public void EjectPart(LimbDetail detail)
     {
-        EjectPart(detail.type, detail.partIndex);
+        EjectPart(detail.type, detail.partIndex, detail.color);
     }
-    public void EjectPart(LIMB_PART limb, int index)
+    public void EjectPart(LIMB_PART limb, int index, COLOR color)
     {
         var clone = Instantiate(PartData.instance.ejected_limb_prefab);
         var controller = clone.GetComponent<LimbController>();
         controller.SetType(limb);
-        controller.SetPart(index);
+        controller.SetPart(index, color);
         clone.transform.position = transform.position;
         var rb = clone.GetComponent<Rigidbody2D>();
         Fling(rb);
@@ -256,36 +256,36 @@ public class PlayerFacialManager : MonoBehaviour
             case LIMB_PART.ARM:
                 if (limb_LeftArm.isEmpty)
                 {
-                    limb_LeftArm.SetPart(index);
+                    limb_LeftArm.SetPart(index, color);
                     return;
                 }
                 if (limb_RightArm.isEmpty)
                 {
-                    limb_RightArm.SetPart(index);
+                    limb_RightArm.SetPart(index, color);
                     return;
                 }
                 break;
             case LIMB_PART.LEG:
                 if (limb_LeftLeg.isEmpty)
                 {
-                    limb_LeftLeg.SetPart(index);
+                    limb_LeftLeg.SetPart(index, color);
                     return;
                 }
                 if (limb_RightLeg.isEmpty)
                 {
-                    limb_RightLeg.SetPart(index);
+                    limb_RightLeg.SetPart(index, color);
                     return;
                 }
                 break;
             case LIMB_PART.DETAIL:
                 if (limb_LeftEar.isEmpty)
                 {
-                    limb_LeftEar.SetPart(index);
+                    limb_LeftEar.SetPart(index, color);
                     return;
                 }
                 if (limb_RightEar.isEmpty)
                 {
-                    limb_RightEar.SetPart(index);
+                    limb_RightEar.SetPart(index, color);
                     return;
                 }
                 break;
