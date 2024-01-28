@@ -7,10 +7,13 @@ using TransitionsPlus;
 public class titleGameController : MonoBehaviour
 {
     Animator animator;
-
+    public AudioClip footSFX; 
+    public AudioClip jumpSFX;
+    public AudioClip loopBGM;
     private void Start()
     {
         animator = GetComponent<Animator>();
+        SoundManager.instance.playBGM(loopBGM);
     }
     private void Update()
     {
@@ -23,8 +26,18 @@ public class titleGameController : MonoBehaviour
         }
     }
 
+    public void playFootSfx()
+    {
+        SoundManager.instance.playSFX(footSFX);
+    }
+    public void playJumpSfx()
+    {
+        SoundManager.instance.playSFX(jumpSFX);
+    }
+
     public void goToGameplayScene()
     {
+        SoundManager.instance.stopBGM();
         var fade = TransitionAnimator.Start(
         TransitionType.SeaWaves, // transition type
         color: Color.white,
@@ -33,4 +46,6 @@ public class titleGameController : MonoBehaviour
         );
         //SceneManager.LoadScene("sc_gameplayprototype");
     }
+
+
 }

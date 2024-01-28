@@ -15,6 +15,7 @@ public class UIController_Menu : MonoBehaviour
     public RectTransform title_img;
 
     public TextMeshProUGUI start_text;
+    public AudioClip titleSfx;
 
     void Awake()
     {
@@ -51,6 +52,7 @@ public class UIController_Menu : MonoBehaviour
     [ContextMenu("TimebarTweenIn")]
     public void TitleTweenIn(float delay = 0f)
     {
+        SoundManager.instance.playSFX(titleSfx);
         if (titleTween != null)
         {
             titleTween.Stop(TweenStopBehavior.Complete);
