@@ -2,10 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TransitionsPlus;
 
 public class titleGameController : MonoBehaviour
 {
     Animator animator;
+
     private void Start()
     {
         animator = GetComponent<Animator>();
@@ -23,6 +25,12 @@ public class titleGameController : MonoBehaviour
 
     public void goToGameplayScene()
     {
-        SceneManager.LoadScene("sc_gameplayprototype");
+        var fade = TransitionAnimator.Start(
+        TransitionType.SeaWaves, // transition type
+        color: Color.white,
+        duration: 1f, // transition duration in seconds
+        sceneNameToLoad: "sc_gameplayprototype"
+        );
+        //SceneManager.LoadScene("sc_gameplayprototype");
     }
 }
