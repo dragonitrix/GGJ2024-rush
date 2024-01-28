@@ -9,6 +9,9 @@ public class playermovementcontrol : MonoBehaviour
     public float force = 5;
     public float torqueForce = 100;
     public PlayerFacialManager facialManager;
+
+    public AudioClip[] damageSound;
+    public AudioClip[] itemSound;
     private void Start()
     {
         rgbd2d = GetComponent<Rigidbody2D>();
@@ -43,9 +46,11 @@ public class playermovementcontrol : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        if (GameManager.instance.isGameOver) return;
         if (collision.gameObject.tag == "Obstacle")
         {
             facialManager.RemovePart();
+            SoundManager.instance.playSFX(damageSound[Random.Range(0, damageSound.Length)]);
         }
         else if(collision.gameObject.tag == "Collectible")
         {
@@ -54,13 +59,14 @@ public class playermovementcontrol : MonoBehaviour
                 PartController part = collision.gameObject.GetComponent<PartController>();
                 facialManager.AddPart(part.GetPartDetail());
                 
+                
             }
             else if (collision.gameObject.GetComponent<LimbController>())
             {
                 LimbController limb = collision.gameObject.GetComponent<LimbController>();
                 facialManager.AddPart(limb.GetLimbDetail());
             }
-
+            SoundManager.instance.playSFX(itemSound[Random.Range(0, itemSound.Length)]);
             Destroy(collision.gameObject);
         }
     }

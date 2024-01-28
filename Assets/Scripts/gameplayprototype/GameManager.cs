@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
+using TransitionsPlus;
 
 public class GameManager : MonoBehaviour
 {
@@ -14,8 +15,9 @@ public class GameManager : MonoBehaviour
     public string[] endingCutscene;
 
     public PlayerFacialManager facialManager;
-    bool isGameOver = false;
-
+    public bool isGameOver = false;
+    public AudioClip gameplayBGM;
+    public TransitionAnimator fadeout;
     private void Awake()
     {
         if (!instance) instance = this;
@@ -43,6 +45,7 @@ public class GameManager : MonoBehaviour
     {
         isGameOver = false;
         UIController_Gameplay.instance.TimebarTweenIn(1f);
+        SoundManager.instance.playBGM(gameplayBGM);
     }
 
     void GameOver()
@@ -52,7 +55,6 @@ public class GameManager : MonoBehaviour
         UIController_Gameplay.instance.TimebarTweenOut();
         DataParser.instance.SetAllPartDetail(facialManager.GetAllPartDetail());
         CancelInvoke();
-        facialManager.GetComponentInParent<CircleCollider2D>().enabled = false;
         RandomEnding(5);
         isGameOver = true;
     }
@@ -64,8 +66,9 @@ public class GameManager : MonoBehaviour
 
     IEnumerator RandomEndingEnum(float timer)
     {
-        yield return new WaitForSeconds(timer);
-
+        yield return new WaitForSeconds(timer - fadeout.profile.duration);
+        fadeout.gameObject.SetActive(true);
+        yield return new WaitForSeconds(fadeout.profile.duration);
         //int endingCount = endingCutscene.Length;
         //float chance = 100 / endingCount;
         //float randomRoll = Random.Range(0f, 100f);
@@ -77,6 +80,7 @@ public class GameManager : MonoBehaviour
         //        break;
         //    }
         //}
+        SoundManager.instance.stopBGM();
         SceneManager.LoadScene(endingCutscene[DataParser.instance.lastEndingIndex]);
         DataParser.instance.lastEndingIndex = DataParser.instance.lastEndingIndex == 0 ? 1 : 0;
     }
