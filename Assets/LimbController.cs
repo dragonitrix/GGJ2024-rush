@@ -54,7 +54,6 @@ public class LimbController : MonoBehaviour
         var pool = PartData.instance.GetLimb(color,type);
         var randResult = Random.Range(0, pool.Count);
         SetPart(randResult, skipAnim);
-
     }
     public void SetPart(LIMB_PART type,int index, bool skipAnim = false)
     {
