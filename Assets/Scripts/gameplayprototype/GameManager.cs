@@ -13,6 +13,8 @@ public class GameManager : MonoBehaviour
     private float gameTimerCount = 0;
     public SceneAsset[] endingCutscene;
 
+    public PlayerFacialManager facialManager;
+
     private void Awake()
     {
         if (!instance) instance = this;
@@ -27,10 +29,17 @@ public class GameManager : MonoBehaviour
     {
         gameTimerCount += Time.fixedDeltaTime;
 
-        if(gameTimerCount > gameplayTimer || (Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.S)))
+        if (gameTimerCount > gameplayTimer || (Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.S)))
         {
-            RandomEnding();
+            GameOver();
         }
+    }
+
+    void GameOver()
+    {
+        facialManager.GetAllPartDetail();
+
+        RandomEnding();
     }
 
     void RandomEnding()

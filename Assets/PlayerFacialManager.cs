@@ -630,7 +630,7 @@ public class PlayerFacialManager : MonoBehaviour
         return shuffledList;
     }
 
-    public void GetAllPartDetail()
+    public AllPartDetail GetAllPartDetail()
     {
         AllPartDetail partDetail;
 
@@ -651,6 +651,7 @@ public class PlayerFacialManager : MonoBehaviour
         {
             partDetail.limbs.Add(subLimb.GetLimbDetail());
         }
+        return partDetail;
     }
 
 }
