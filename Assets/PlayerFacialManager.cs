@@ -647,9 +647,9 @@ public class PlayerFacialManager : MonoBehaviour
 
         partDetail.limbs = new List<LimbDetail>();
 
-        foreach (var subLimb in subLimbs)
+        foreach (var limb in limbs)
         {
-            partDetail.limbs.Add(subLimb.GetLimbDetail());
+            partDetail.limbs.Add(limb.GetLimbDetail());
         }
         return partDetail;
     }
