@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Part
   - Ejected
+  - Obstacle
+  - Collectible
   layers:
   - Default
   - TransparentFX
