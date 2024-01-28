@@ -119,6 +119,8 @@ public class PartController : MonoBehaviour
     public PartDetail GetPartDetail()
     {
         PartDetail detail;
+        detail.localPos = transform.localPosition;
+        detail.isEmpty = isEmpty;
         detail.type = type;
         detail.partIndex = partIndex;
         return detail;
@@ -128,6 +130,8 @@ public class PartController : MonoBehaviour
 
 public struct PartDetail
 {
+    public Vector3 localPos; 
+    public bool isEmpty;
     public FACIAL_PART type;
     public int partIndex;
 }
