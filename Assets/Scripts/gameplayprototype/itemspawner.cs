@@ -38,24 +38,10 @@ public class itemspawner : MonoBehaviour
 
     public void SpawnPart()
     {
-        GameObject collectible = Instantiate(collectiblePrefabs[Random.Range(0, collectiblePrefabs.Length)], transform.position, Quaternion.identity);
+        GameObject collectible = Instantiate(collectiblePrefabs[0], transform.position, Quaternion.identity);
 
-        if(collectible.GetComponent<PartController>())
-        {
-            PartController part = collectible.GetComponent<PartController>();
-            part.RandomPart();
-        }
-        else if(collectible.GetComponent<LimbController>())
-        {
-            LimbController limb = collectible.GetComponent<LimbController>();
-            limb.RandomColor();
-            limb.RandomPart();
-        }
-        else
-        {
-            Destroy(collectible);
-            return;
-        }
+        PartController part = collectible.GetComponent<PartController>();
+        part.RandomPart();
 
         collectible.transform.position += new Vector3(Random.Range(minXOffset, maxXOffset), 0, 0);
         collectible.transform.Rotate(0, 0, Random.Range(minZRotationOffset, maxZRotationOffset));
@@ -63,7 +49,24 @@ public class itemspawner : MonoBehaviour
         rgbd2d.gravityScale = maxGravityScale;
         rgbd2d.AddTorque(Random.Range(-5f, 5f), ForceMode2D.Impulse);
 
-        Destroy(collectible, 10);
+        Destroy(collectible, 20);
+        Invoke("SpawnLimb", collectibleSpawnTick);
+    }
+    public void SpawnLimb()
+    {
+        GameObject collectible = Instantiate(collectiblePrefabs[1], transform.position, Quaternion.identity);
+
+        LimbController limb = collectible.GetComponent<LimbController>();
+        limb.RandomColor();
+        limb.RandomPart();
+
+        collectible.transform.position += new Vector3(Random.Range(minXOffset, maxXOffset), 0, 0);
+        collectible.transform.Rotate(0, 0, Random.Range(minZRotationOffset, maxZRotationOffset));
+        Rigidbody2D rgbd2d = collectible.GetComponent<Rigidbody2D>();
+        rgbd2d.gravityScale = maxGravityScale;
+        rgbd2d.AddTorque(Random.Range(-5f, 5f), ForceMode2D.Impulse);
+
+        Destroy(collectible, 20);
         Invoke("SpawnPart", collectibleSpawnTick);
     }
 }
