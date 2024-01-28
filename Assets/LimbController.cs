@@ -48,6 +48,10 @@ public class LimbController : MonoBehaviour
         }
 
     }
+    public void RandomColor()
+    {
+        color = (COLOR)Random.Range(0, 6);
+    }
 
     public void RandomPart(bool skipAnim = false)
     {
