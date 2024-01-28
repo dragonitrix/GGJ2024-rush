@@ -41,16 +41,16 @@ public class PlayerFacialManager : MonoBehaviour
 
     public int max_subPart = 10;
 
-    [ContextMenu("TestAdd")]
-    public void TesttAdd()
-    {
-        AddPart(FACIAL_PART.LEFT_EYE, 0);
-    }
-    [ContextMenu("TestAdd Limb")]
-    public void TesttAddLimb()
-    {
-        AddPart(LIMB_PART.ARM, 0);
-    }
+    //[ContextMenu("TestAdd")]
+    //public void TesttAdd()
+    //{
+    //    AddPart(FACIAL_PART.LEFT_EYE, 0);
+    //}
+    //[ContextMenu("TestAdd Limb")]
+    //public void TesttAddLimb()
+    //{
+    //    AddPart(LIMB_PART.ARM, 0);
+    //}
 
     public void RemovePart(bool anim = true)
     {
@@ -204,8 +204,9 @@ public class PlayerFacialManager : MonoBehaviour
         Destroy(rb_part.gameObject, 5f);
     }
 
-    public void AddPart(PartDetail detail){
-        AddPart(detail.type,detail.partIndex);
+    public void AddPart(PartDetail detail)
+    {
+        AddPart(detail.type, detail.partIndex);
     }
 
     public void AddPart(FACIAL_PART type, int index)
@@ -242,11 +243,12 @@ public class PlayerFacialManager : MonoBehaviour
         }
     }
 
-    public void AddPart(LimbDetail detail){
-        AddPart(detail.type,detail.partIndex);
+    public void AddPart(LimbDetail detail)
+    {
+        AddPart(detail.type, detail.partIndex, detail.color);
     }
 
-    public void AddPart(LIMB_PART type, int index)
+    public void AddPart(LIMB_PART type, int index, COLOR color)
     {
 
         switch (type)
@@ -296,7 +298,7 @@ public class PlayerFacialManager : MonoBehaviour
         {
             if (subLimb.isEmpty)
             {
-                subLimb.SetPart(type, index);
+                subLimb.SetPart(type, index, color);
                 subLimb.spriteRenderer.flipX = (Random.Range(0, 2) == 1) ? true : false;
                 return;
             }

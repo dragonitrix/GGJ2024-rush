@@ -44,6 +44,7 @@ public class PartController : MonoBehaviour
 
     public void RandomPart(bool skipAnim = false)
     {
+        type = (FACIAL_PART)Random.Range(0,3);
         var pool = PartData.instance.GetPartSprites(type);
         if (pool == null)
         {

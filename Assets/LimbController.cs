@@ -51,13 +51,15 @@ public class LimbController : MonoBehaviour
 
     public void RandomPart(bool skipAnim = false)
     {
+        type = (LIMB_PART)Random.Range(0,3);
         var pool = PartData.instance.GetLimb(color,type);
         var randResult = Random.Range(0, pool.Count);
         SetPart(randResult, skipAnim);
     }
-    public void SetPart(LIMB_PART type,int index, bool skipAnim = false)
+    public void SetPart(LIMB_PART type,int index, COLOR color ,bool skipAnim = false)
     {
         SetType(type);
+        this.color = color;
         SetPart(index, skipAnim);
     }
     public void SetPart(int index, bool skipAnim = false)
@@ -109,6 +111,7 @@ public class LimbController : MonoBehaviour
 
     public LimbDetail GetLimbDetail(){
         LimbDetail detail;
+        detail.color = color;
         detail.type = type;
         detail.partIndex = partIndex;
         return detail;
@@ -116,6 +119,7 @@ public class LimbController : MonoBehaviour
 }
 
 public struct LimbDetail{
+    public COLOR color;
     public LIMB_PART type;
     public int partIndex;
 }
