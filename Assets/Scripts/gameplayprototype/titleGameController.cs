@@ -14,6 +14,9 @@ public class titleGameController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
+
+            UIController_Menu.instance.TitleTweenOut();
+
             animator.SetBool("isStart", true);
         }
     }
