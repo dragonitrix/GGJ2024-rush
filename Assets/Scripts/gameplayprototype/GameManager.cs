@@ -10,7 +10,8 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
 
     public float gameplayTimer = 60;
-    private float gameTimerCount = 0;
+    [HideInInspector]
+    public float gameTimerCount = 0;
     public SceneAsset[] endingCutscene;
 
     public PlayerFacialManager facialManager;
@@ -20,6 +21,11 @@ public class GameManager : MonoBehaviour
         if (!instance) instance = this;
         else if (instance != this) Destroy(gameObject);
     }
+
+    void Start(){
+        GameStart();
+    }
+
     private void Update()
     {
         UpdateTimer();
@@ -33,6 +39,10 @@ public class GameManager : MonoBehaviour
         {
             GameOver();
         }
+    }
+
+    void GameStart(){
+        UIController_Gameplay.instance.TimebarTweenIn(1f);
     }
 
     void GameOver()
