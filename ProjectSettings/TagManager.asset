@@ -8,6 +8,8 @@ TagManager:
   - Ejected
   - Obstacle
   - Collectible
+  - Platform
+  - Wall
   layers:
   - Default
   - TransparentFX
